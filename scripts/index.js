@@ -9,7 +9,7 @@
 // @todo: Вывести карточки на страницу
 
 function createCardElement(cardData, removeCard) {
-    const cardTemplate = document.querySelector('#card-template').content.cloneNode(true);
+    const cardTemplate = document.querySelector('#card-template').content.querySelector('.card').cloneNode(true);
 
     const cardImage = cardTemplate.querySelector('.card__image');
     const cardTitle = cardTemplate.querySelector('.card__title');
@@ -19,10 +19,8 @@ function createCardElement(cardData, removeCard) {
     cardImage.alt = cardData.name;
     cardTitle.textContent = cardData.name;
 
-    const cardItem = cardTemplate.children[0];
-
     deleteButton.addEventListener('click', () => {
-        removeCard(cardItem);
+        removeCard(cardTemplate);
     });
 
     return cardTemplate;
