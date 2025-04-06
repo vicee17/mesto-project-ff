@@ -1,7 +1,4 @@
-import '../blocks/main.css';
-import {initialCards} from './cards';
-
-function createCardElement(cardData, removeCard) {
+export function createCardElement(cardData, removeCard) {
     const cardTemplate = document.querySelector('#card-template').content.querySelector('.card').cloneNode(true);
 
     const cardImage = cardTemplate.querySelector('.card__image');
@@ -19,14 +16,8 @@ function createCardElement(cardData, removeCard) {
     return cardTemplate;
 }
 
-function removeCard(cardItem) {
+export function removeCard(cardItem) {
     if (cardItem) {
         cardItem.remove();
     }
 }
-
-const placesList = document.querySelector('.places__list');
-const cardElements = initialCards.map((cardData) => {
-    return createCardElement(cardData, removeCard);
-});
-placesList.append(...cardElements);
