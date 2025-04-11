@@ -1,28 +1,84 @@
-import '../../blocks/main.css';  
+import '../../pages/index.css';  
 import {initialCards} from './cards';
-import { openModal, closeModal, setupModalCloseHandlers } from './modal';
+import { openModal, closeModal, setupModalCloseHandlers, handlerLikes, handleImageClick} from './modal';
 import { createCardElement, removeCard } from './card';
 
 const placesList = document.querySelector('.places__list');
 const cardElements = initialCards.map((cardData) => {
-    return createCardElement(cardData, removeCard);
+    return createCardElement(cardData, removeCard, handlerLikes, handleImageClick);
 });
 placesList.append(...cardElements);
 
 document.addEventListener('DOMContentLoaded', () => {
     setupModalCloseHandlers();
+    handlerLikes();
+    document.querySelectorAll('.popup').forEach(popup => {
+      popup.classList.add('popup_is-animated');
+    });
   });
 
-const profileEditButton = document.querySelector('.profile__edit-button');
+//Popups
 const popupEdit = document.querySelector('.popup_type_edit');
-const addCardButton = document.querySelector('.profile__add-button');
 const addCardPopup = document.querySelector('.popup_type_new-card');
-const imagePopup = document.querySelector('.popup_type_image');
 
+//DOM Elements
+const profileTitle = document.querySelector('.profile__title');
+const profileDescription = document.querySelector('.profile__description');
+
+//Buttons
+const addCardButton = document.querySelector('.profile__add-button');
+const profileEditButton = document.querySelector('.profile__edit-button');
+
+//Forms
 const editForm = document.forms['edit-profile'];
 const addCardFrom = document.forms['new-place'];
 
-profileEditButton.addEventListener('click',() => openModal(popupEdit));
-addCardButton.addEventListener('click', () => openModal(addCardPopup));
+//Inputs profile
+const nameInput = editForm.querySelector('.popup__input_type_name')
+const descriptionInput = editForm.querySelector('.popup__input_type_description');
+
+//Inputs cards
+const cardNameInput = document.querySelector('.popup__input_type_card-name');
+const cardLinkInput = document.querySelector('.popup__input_type_url');
+
+profileEditButton.addEventListener('click',() => {
+  nameInput.value = profileTitle.textContent;
+  descriptionInput.value = profileDescription.textContent;
+
+  openModal(popupEdit);
+});
+
+editForm.addEventListener('submit', (evt) => {
+  evt.preventDefault();
+  profileTitle.textContent = nameInput.value;
+  profileDescription.textContent = descriptionInput.value;
+  closeModal(popupEdit);
+});
+
+addCardButton.addEventListener('click', () => {openModal(addCardPopup)});
+
+addCardFrom.addEventListener('submit', (evt) => {
+  evt.preventDefault();
+
+  const newCardData = {
+    name: cardNameInput.value,
+    link: cardLinkInput.value
+  };
+
+  const newCardElement = createCardElement(newCardData, removeCard, handlerLikes, handleImageClick);
+
+  placesList.prepend(newCardElement);
+
+  closeModal(addCardPopup);
+  addCardFrom.reset();
+});
+
+
+
+
+
+
+
+
 
 
