@@ -8,11 +8,6 @@ export function closeModal(modalElement) {
     modalElement.classList.remove('popup_is-opened');
     document.removeEventListener('keydown', handleEscape);
     document.body.style.overflow = '';
-
-    const form = modalElement.querySelector('form');
-    if(form) {
-        form.reset();
-    }
 }
 
 function handleEscape(evt) {
@@ -34,24 +29,7 @@ export function setupModalCloseHandlers() {
     });
 }
 
-export function handlerLikes() {
-    document.addEventListener('click', (evt) => {
-        if (evt.target.classList.contains('card__like-button')) {
-            evt.target.classList.toggle('card__like-button_is-active');
-        }
-    });
-}
 
-export function handleImageClick(cardData) {
-    const imagePopup = document.querySelector('.popup_type_image');
-    const popupImage = imagePopup.querySelector('.popup__image');
-    const popupCaption = imagePopup.querySelector('.popup__caption');
-
-    popupImage.src = cardData.link;
-    popupImage.alt = cardData.name;
-    popupCaption.textContent = cardData.name;
-    openModal(imagePopup);
-}
 
 
 
