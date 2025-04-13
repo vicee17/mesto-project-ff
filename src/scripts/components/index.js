@@ -1,11 +1,11 @@
 import '../../pages/index.css';  
 import {initialCards} from './cards';
 import { openModal, closeModal, setupModalCloseHandlers} from './modal';
-import { createCardElement, removeCard, setupLikeHandler } from './card';
+import { createCardElement, removeCard} from './card';
 
 const placesList = document.querySelector('.places__list');
 const cardElements = initialCards.map((cardData) => {
-    return createCardElement(cardData, removeCard, handlerLikes, handleImageClick);
+    return createCardElement(cardData, removeCard, handleImageClick);
 });
 placesList.append(...cardElements);
 
@@ -43,10 +43,6 @@ const descriptionInput = editForm.querySelector('.popup__input_type_description'
 const cardNameInput = document.querySelector('.popup__input_type_card-name');
 const cardLinkInput = document.querySelector('.popup__input_type_url');
 
-function handlerLikes(evt) {
-  setupLikeHandler(evt.target);
-}
-
 profileEditButton.addEventListener('click',() => {
   nameInput.value = profileTitle.textContent;
   descriptionInput.value = profileDescription.textContent;
@@ -78,7 +74,7 @@ addCardFrom.addEventListener('submit', (evt) => {
     link: cardLinkInput.value
   };
 
-  const newCardElement = createCardElement(newCardData, removeCard, handlerLikes, handleImageClick);
+  const newCardElement = createCardElement(newCardData, removeCard, handleImageClick);
 
   placesList.prepend(newCardElement);
 
