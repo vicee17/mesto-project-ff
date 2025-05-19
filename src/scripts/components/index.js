@@ -6,10 +6,6 @@ import { enableValidation, clearValidation } from './validilityForm';
 import { getUserData, updateUserDatam, updateUserAvatar } from './api';
 
 const placesList = document.querySelector('.places__list');
-const cardElements = initialCards.map((cardData) => {
-    return createCardElement(cardData, removeCard, handleImageClick);
-});
-placesList.append(...cardElements);
 
 document.addEventListener('DOMContentLoaded', () => {
     setupModalCloseHandlers();

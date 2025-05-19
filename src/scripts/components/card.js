@@ -8,12 +8,14 @@ export function createCardElement(cardData, removeCard, handleImageClick) {
     const cardTitle = cardTemplate.querySelector('.card__title');
     const deleteButton = cardTemplate.querySelector('.card__delete-button');
     const likeButton = cardTemplate.querySelector('.card__like-button');
-
+    const likesCount = cardTemplate.querySelector('.likes-count');
     
     cardImage.src = cardData.link;
     cardImage.alt = cardData.name;
     cardTitle.textContent = cardData.name;
     cardTemplate.dataset.cardId = cardData._id;
+
+    likesCount.textContent = cardData.likes.length;
 
     deleteButton.addEventListener('click', () => removeCard(cardTemplate));
     likeButton.addEventListener('click', (evt) => handleLikeClick(evt));
@@ -36,12 +38,14 @@ export function removeCard(cardId) {
 }
 
 function handleLikeClick(evt) {
+    const cardElement = evt.currentTarget.closest('.card');
     const cardId = evt.currentTarget.closest('.card').dataset.cardId;
+    const likesCount = cardElement.likes.length;
    
     if (evt.currentTarget.classList.contains('card__like-button_is-active')) {
-        removeLike(cardId);
+        removeLike(cardId)
     } else {
-        addLike(cardId);
+        addLike(cardId)
     }
 }
 
@@ -66,3 +70,4 @@ export async function createNewCard(cardData, placesList) {
         console.error('Ошибка при создании карточки:', error);
     }
 }
+
