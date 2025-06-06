@@ -73,10 +73,18 @@
     <button type="button" class="popup__close"></button>
     <h3 class="popup__title">Обовить аватар</h3>
     <form class="popup__form" name="new-avatar" novalidate>
-      <input type="text" name="new-avatar" class="popup__input popup__input_type_new-avatar" placeholder="Ссылка на аватар" required>
+      <input type="url" name="new-avatar" class="popup__input popup__input_type_new-avatar" placeholder="Ссылка на аватар" required>
       <span class="popup__error-message"></span>
       <button type="submit" class="button popup__button">Сохранить</button>
     </form>
+  </div>
+</div>
+<div class="popup popup_type_delete-card">
+  <div class="popup__content popup__content_delete-card">
+    <button type="button" class="popup__close"></button>
+    <h3 class="popup__title">Удалить карточку?</h3>
+    <button type="submit" class="popup__button button popup__button-delete-submit">Да</button>
+    <button type="reset" class="popup__button button popup__button-delete-reset">Нет</button>
   </div>
 </div>
 

@@ -1,7 +1,7 @@
 const config = {
-    baseUrl: 'https://nomoreparties.co/v1/wff-cohort-37',
+    baseUrl: 'https://nomoreparties.co/v1/wff-cohort-40',
     headers: {
-        authorization: '2910644d-9e23-4e1e-b9d9-bc122d0ef960',
+        authorization: 'fbeda219-9100-4651-b657-e0432b0587f1',
         ContentType: 'application/json',
     }
 };
@@ -19,7 +19,8 @@ export const getInitialCards = () => {
 }
 
 export const getUserData = () => {
-    return fetch(`${config.baseUrl}/user`, {
+    return fetch(`${config.baseUrl}/users/me`, {
+        method: 'GET',
         headers: config.headers
     })
     .then (res => {
@@ -30,7 +31,7 @@ export const getUserData = () => {
     });
 }
 
-export const updateUserData = (name, about) => {
+export const updateUserData = ({name, about}) => {
     return fetch(`${config.baseUrl}/users/me`, {
         method: 'PATCH',
         headers: config.headers,

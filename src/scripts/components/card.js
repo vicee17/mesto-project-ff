@@ -1,7 +1,7 @@
 import { getInitialCards, createCard, deleteCard, addLike, removeLike } from "./api";
-import { handleImageClick } from "./index";
+import { handleImageClick, showConfirmDeletePopup } from "./index";
 
-export function createCardElement(cardData, removeCard, handleImageClick) {
+export function createCardElement(cardData, handleImageClick, userId) {
     const cardTemplate = document.querySelector('#card-template').content.querySelector('.card').cloneNode(true);
 
     const cardImage = cardTemplate.querySelector('.card__image');
@@ -9,17 +9,20 @@ export function createCardElement(cardData, removeCard, handleImageClick) {
     const deleteButton = cardTemplate.querySelector('.card__delete-button');
     const likeButton = cardTemplate.querySelector('.card__like-button');
     const likesCount = cardTemplate.querySelector('.likes-count');
-    
+
     cardImage.src = cardData.link;
     cardImage.alt = cardData.name;
     cardTitle.textContent = cardData.name;
     cardTemplate.dataset.cardId = cardData._id;
-
     likesCount.textContent = cardData.likes.length;
 
-    deleteButton.addEventListener('click', () => removeCard(cardTemplate));
+    if (cardData.owner._id !== userId) {
+        deleteButton.remove();
+    }
+
     likeButton.addEventListener('click', (evt) => handleLikeClick(evt));
     cardImage.addEventListener('click', () => handleImageClick(cardData));
+    deleteButton.addEventListener('click', () => showConfirmDeletePopup(cardData._id));
 
     return cardTemplate;
 }
@@ -40,20 +43,30 @@ export function removeCard(cardId) {
 function handleLikeClick(evt) {
     const cardElement = evt.currentTarget.closest('.card');
     const cardId = evt.currentTarget.closest('.card').dataset.cardId;
-    const likesCount = cardElement.likes.length;
+    const likesCount = cardElement.querySelector('.likes-count');
    
     if (evt.currentTarget.classList.contains('card__like-button_is-active')) {
         removeLike(cardId)
+        .then(updateCard => {
+            likesCount.textContent = updateCard.likes.length;
+            evt.target.classList.toggle('card__like-button_is-active');
+        })
+        .catch(error => console.error('Ошибка при снятии лайка:', error));
     } else {
         addLike(cardId)
+        .then(updateCard => {
+            likesCount.textContent = updateCard.likes.length;
+            evt.target.classList.toggle('card__like-button_is-active');
+        })
+        .catch(error => console.error('Ошибка при добавлении лайка:', error));
     }
 }
 
-export async function loadInitialCards(placesList) {
+export async function loadInitialCards(placesList, userId) {
     try {
         const cards = await getInitialCards();
         const cardElements = cards.map((cardData) => {
-            return createCardElement(cardData, removeCard, handleImageClick);
+            return createCardElement(cardData, handleImageClick, userId);
         });
         placesList.append(...cardElements);
     } catch (error) {
@@ -61,13 +74,15 @@ export async function loadInitialCards(placesList) {
     }
 }
 
-export async function createNewCard(cardData, placesList) {
+export async function createNewCard(cardData, placesList, userId, handleImageClick) {
     try {
         const newCard = await createCard(cardData);
-        const newCardElement = createCardElement(newCard, removeCard, handleImageClick);
+        const newCardElement = createCardElement(newCard, handleImageClick, userId);
         placesList.prepend(newCardElement);
+        return true;
     } catch (error) {
         console.error('Ошибка при создании карточки:', error);
+        return false
     }
 }
 
