@@ -2,7 +2,7 @@ const config = {
     baseUrl: 'https://nomoreparties.co/v1/wff-cohort-40',
     headers: {
         authorization: 'fbeda219-9100-4651-b657-e0432b0587f1',
-        ContentType: 'application/json',
+        'Content-Type': 'application/json',
     }
 };
 
@@ -31,7 +31,7 @@ export const getUserData = () => {
     });
 }
 
-export const updateUserData = ({name, about}) => {
+export const updateUserData = (name, about) => {
     return fetch(`${config.baseUrl}/users/me`, {
         method: 'PATCH',
         headers: config.headers,
@@ -48,13 +48,13 @@ export const updateUserData = ({name, about}) => {
     });
 }
 
-export const createCard = (name, link) => {
+export const createCard = (cardData) => {
     return fetch(`${config.baseUrl}/cards`, {
         method: 'POST',
         headers: config.headers,
         body: JSON.stringify({
-            name,
-            link
+            name: cardData.name,
+            link: cardData.link
         })
     })
     .then (res => {

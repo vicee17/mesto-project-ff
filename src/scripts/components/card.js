@@ -1,5 +1,5 @@
 import { getInitialCards, createCard, deleteCard, addLike, removeLike } from "./api";
-import { handleImageClick, showConfirmDeletePopup } from "./index";
+import { handleImageClick, showConfirmDeletePopup, pressConfirmButton } from "./index";
 
 export function createCardElement(cardData, handleImageClick, userId) {
     const cardTemplate = document.querySelector('#card-template').content.querySelector('.card').cloneNode(true);
@@ -9,6 +9,8 @@ export function createCardElement(cardData, handleImageClick, userId) {
     const deleteButton = cardTemplate.querySelector('.card__delete-button');
     const likeButton = cardTemplate.querySelector('.card__like-button');
     const likesCount = cardTemplate.querySelector('.likes-count');
+    const confirmButton = document.querySelector('.popup__button-delete-submit');
+    const cancelButton = document.querySelector('.popup__button-delete-reset');
 
     cardImage.src = cardData.link;
     cardImage.alt = cardData.name;
@@ -23,12 +25,13 @@ export function createCardElement(cardData, handleImageClick, userId) {
     likeButton.addEventListener('click', (evt) => handleLikeClick(evt));
     cardImage.addEventListener('click', () => handleImageClick(cardData));
     deleteButton.addEventListener('click', () => showConfirmDeletePopup(cardData._id));
+    confirmButton.addEventListener('click', pressConfirmButton);
 
     return cardTemplate;
 }
 
 export function removeCard(cardId) {
-    deleteCard(cardId)
+    return deleteCard(cardId)
     .then (() => {
         const cardElement = document.querySelector(`[data-card-id="${cardId}"]`);
         if (cardElement) {

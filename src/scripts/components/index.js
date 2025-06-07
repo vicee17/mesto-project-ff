@@ -51,7 +51,6 @@ const newAvatarForm = document.forms['new-avatar'];
 
 //Inputs profile
 const nameInput = editForm.querySelector('.popup__input_type_name');
-console.log(nameInput);
 const descriptionInput = editForm.querySelector('.popup__input_type_description');
 
 //Inputs cards
@@ -77,11 +76,6 @@ export function pressConfirmButton() {
       .then(() => closeModal(confirmDeletePopup))
       .catch(error => console.error('Ошибка удаления:', error));
   }
-}
-
-export function pressCancelButton() {
-  cardIdForDelete = null;
-  closeModal(confirmDeletePopup);
 }
 
 async function updateUser(userData) {
@@ -121,7 +115,14 @@ editForm.addEventListener('submit', (evt) => {
 
 newAvatarForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
-    const avatarUrl = newAvatarForm.querySelector('.popup__input_type_url').value;
+
+    const submitButton = newAvatarForm.querySelector('.popup__button');
+    const originalText = submitButton.textContent;
+
+    submitButton.textContent = 'Сохранение...';
+    submitButton.disabled = true;
+
+    const avatarUrl = newAvatarForm.querySelector('.popup__input_type_new-avatar').value;
     
     updateUserAvatar(avatarUrl)
         .then(() => {
@@ -129,7 +130,11 @@ newAvatarForm.addEventListener('submit', (evt) => {
             closeModal(newAvatarPopup);
             newAvatarForm.reset();
         })
-        .catch(error => console.error('Ошибка обновления аватара:', error));
+        .catch(error => console.error('Ошибка обновления аватара:', error))
+        .finally(() => {
+          submitButton.textContent = originalText;
+          submitButton.disabled = false;
+        });
 });
 
 newAvatarButton.addEventListener('click', () => {

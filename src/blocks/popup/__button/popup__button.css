@@ -14,6 +14,10 @@
   margin-top: 48px;
 }
 
+.popup__button.popup__button-delete-submit {
+  margin-top: 38px;
+}
+
 .popup__button:hover {
   background: rgba(0, 0, 0, 0.8);
   cursor: pointer;

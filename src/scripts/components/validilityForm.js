@@ -17,12 +17,32 @@ function hideInputError(inputElement) {
 function checkInputValidation(inputElement) {
     if (!inputElement.validity.valid) {
         showInputError(inputElement, inputElement.validationMessage);
-        return; 
+        return;
     }
-    if (!/^[a-zA-Zа-яА-ЯёЁ\s-]+$/.test(inputElement.value.trim())) {
-        showInputError(inputElement, 'Некорректный ввод. Допустимы только латинские и русские буквы, дефисы и пробелы.');
+
+    if (inputElement.type === 'text' && inputElement.name !== 'link') {
+        if (!/^[a-zA-Zа-яА-ЯёЁ\s-]+$/.test(inputElement.value.trim())) {
+            showInputError(inputElement, 'Некорректный ввод. Допустимы только латинские и русские буквы, дефисы и пробелы.');
+        } else {
+            hideInputError(inputElement);
+        }
+    } else if (inputElement.name === 'link') {
+        if (!isValidUrl(inputElement.value)) {
+            showInputError(inputElement, 'Введите корректный URL');
+        } else {
+            hideInputError(inputElement);
+        }
     } else {
         hideInputError(inputElement);
+    }
+}
+
+function isValidUrl(url) {
+    try {
+        new URL(url);
+        return true;
+    } catch (err) {
+        return false;
     }
 }
 
