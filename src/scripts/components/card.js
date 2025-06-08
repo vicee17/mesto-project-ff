@@ -1,22 +1,25 @@
-import { getInitialCards, createCard, deleteCard, addLike, removeLike } from "./api";
-import { handleImageClick, showConfirmDeletePopup, pressConfirmButton } from "./index";
+import { deleteCard, addLike, removeLike } from "./api";
 
-export function createCardElement(cardData, handleImageClick, userId) {
+export function createCardElement(cardData, handleImageClick, userId, showConfirmDeletePopup) {
     const cardTemplate = document.querySelector('#card-template').content.querySelector('.card').cloneNode(true);
+    const cardId = cardData._id;
 
     const cardImage = cardTemplate.querySelector('.card__image');
     const cardTitle = cardTemplate.querySelector('.card__title');
     const deleteButton = cardTemplate.querySelector('.card__delete-button');
     const likeButton = cardTemplate.querySelector('.card__like-button');
     const likesCount = cardTemplate.querySelector('.likes-count');
-    const confirmButton = document.querySelector('.popup__button-delete-submit');
-    const cancelButton = document.querySelector('.popup__button-delete-reset');
 
     cardImage.src = cardData.link;
     cardImage.alt = cardData.name;
     cardTitle.textContent = cardData.name;
-    cardTemplate.dataset.cardId = cardData._id;
+    cardTemplate.dataset.cardId = cardId;
     likesCount.textContent = cardData.likes.length;
+
+    const isLiked = cardData.likes.some(like => like._id === userId);
+    if (isLiked) {
+        likeButton.classList.add('card__like-button_is-active');
+    }
 
     if (cardData.owner._id !== userId) {
         deleteButton.remove();
@@ -24,8 +27,7 @@ export function createCardElement(cardData, handleImageClick, userId) {
 
     likeButton.addEventListener('click', (evt) => handleLikeClick(evt));
     cardImage.addEventListener('click', () => handleImageClick(cardData));
-    deleteButton.addEventListener('click', () => showConfirmDeletePopup(cardData._id));
-    confirmButton.addEventListener('click', pressConfirmButton);
+    deleteButton.addEventListener('click', () => showConfirmDeletePopup(cardId));
 
     return cardTemplate;
 }
@@ -65,27 +67,5 @@ function handleLikeClick(evt) {
     }
 }
 
-export async function loadInitialCards(placesList, userId) {
-    try {
-        const cards = await getInitialCards();
-        const cardElements = cards.map((cardData) => {
-            return createCardElement(cardData, handleImageClick, userId);
-        });
-        placesList.append(...cardElements);
-    } catch (error) {
-        console.error('Ошибка при загрузке карточек:', error);
-    }
-}
 
-export async function createNewCard(cardData, placesList, userId, handleImageClick) {
-    try {
-        const newCard = await createCard(cardData);
-        const newCardElement = createCardElement(newCard, handleImageClick, userId);
-        placesList.prepend(newCardElement);
-        return true;
-    } catch (error) {
-        console.error('Ошибка при создании карточки:', error);
-        return false
-    }
-}
 

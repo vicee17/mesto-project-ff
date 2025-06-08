@@ -1,5 +1,6 @@
 function showInputError(inputElement, errorMessage) {
-    const errorElement = inputElement.nextElementSibling;
+    const container = inputElement.closest('.input-group');
+    const errorElement = container.querySelector('.popup__error-message');
 
     inputElement.classList.add('popup__input-error');
     errorElement.textContent = errorMessage;
@@ -7,7 +8,8 @@ function showInputError(inputElement, errorMessage) {
 }
 
 function hideInputError(inputElement) {
-    const errorElement = inputElement.nextElementSibling;
+    const container = inputElement.closest('.input-group');
+    const errorElement = container.querySelector('.popup__error-message');
 
     inputElement.classList.remove('popup__input-error');
     errorElement.classList.remove('popup__error-visible');
@@ -20,15 +22,15 @@ function checkInputValidation(inputElement) {
         return;
     }
 
-    if (inputElement.type === 'text' && inputElement.name !== 'link') {
-        if (!/^[a-zA-Zа-яА-ЯёЁ\s-]+$/.test(inputElement.value.trim())) {
-            showInputError(inputElement, 'Некорректный ввод. Допустимы только латинские и русские буквы, дефисы и пробелы.');
+    if (inputElement.type === 'text') {
+        if (inputElement.validity.patternMismatch) {
+            showInputError(inputElement, inputElement.dataset.errorMessage);
         } else {
             hideInputError(inputElement);
         }
     } else if (inputElement.name === 'link') {
         if (!isValidUrl(inputElement.value)) {
-            showInputError(inputElement, 'Введите корректный URL');
+            showInputError(inputElement, inputElement.validationMessage);
         } else {
             hideInputError(inputElement);
         }
@@ -58,17 +60,21 @@ function setEventListeners(formElement) {
             toggleButtonState(inputList, buttonElement);
         });
     });
+
+    formElement.addEventListener('submit', (evt) => {
+        if (hasInvalidInput(inputList)) {
+            evt.preventDefault();
+        }
+    });
 }
 
 export function enableValidation() {
     const formList = document.querySelectorAll('.popup__form');
 
     formList.forEach((formElement) => {
-        formElement.addEventListener('submit', (evt) => {
-            evt.preventDefault();
-        });
         setEventListeners(formElement);
     });
+
 }
 
 export function clearValidation(formElement) {
@@ -92,7 +98,9 @@ function hasInvalidInput(inputList) {
 function toggleButtonState(inputList, buttonElement) {
     if (hasInvalidInput(inputList)) {
         buttonElement.classList.add('button-inactive');
+        buttonElement.disabled = true;
     }else {
         buttonElement.classList.remove('button-inactive')
+        buttonElement.disabled = false;
     }
 }
