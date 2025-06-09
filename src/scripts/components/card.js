@@ -3,6 +3,8 @@ import { deleteCard, addLike, removeLike } from "./api";
 export function createCardElement(cardData, handleImageClick, userId, showConfirmDeletePopup) {
     const cardTemplate = document.querySelector('#card-template').content.querySelector('.card').cloneNode(true);
     const cardId = cardData._id;
+    
+    cardTemplate.id = cardId;
 
     const cardImage = cardTemplate.querySelector('.card__image');
     const cardTitle = cardTemplate.querySelector('.card__title');
@@ -13,7 +15,6 @@ export function createCardElement(cardData, handleImageClick, userId, showConfir
     cardImage.src = cardData.link;
     cardImage.alt = cardData.name;
     cardTitle.textContent = cardData.name;
-    cardTemplate.dataset.cardId = cardId;
     likesCount.textContent = cardData.likes.length;
 
     const isLiked = cardData.likes.some(like => like._id === userId);
@@ -35,7 +36,7 @@ export function createCardElement(cardData, handleImageClick, userId, showConfir
 export function removeCard(cardId) {
     return deleteCard(cardId)
     .then (() => {
-        const cardElement = document.querySelector(`[data-card-id="${cardId}"]`);
+        const cardElement = document.getElementById(cardId);
         if (cardElement) {
             cardElement.remove();
         }

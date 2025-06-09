@@ -17,26 +17,17 @@ function hideInputError(inputElement) {
 }
 
 function checkInputValidation(inputElement) {
-    if (!inputElement.validity.valid) {
-        showInputError(inputElement, inputElement.validationMessage);
-        return;
-    }
+  if (inputElement.validity.patternMismatch) {
+    inputElement.setCustomValidity(inputElement.dataset.errorMessage);
+  } else {
+    inputElement.setCustomValidity("");
+  }
 
-    if (inputElement.type === 'text') {
-        if (inputElement.validity.patternMismatch) {
-            showInputError(inputElement, inputElement.dataset.errorMessage);
-        } else {
-            hideInputError(inputElement);
-        }
-    } else if (inputElement.name === 'link') {
-        if (!isValidUrl(inputElement.value)) {
-            showInputError(inputElement, inputElement.validationMessage);
-        } else {
-            hideInputError(inputElement);
-        }
-    } else {
-        hideInputError(inputElement);
-    }
+  if (!inputElement.validity.valid) {
+    showInputError(inputElement, inputElement.validationMessage);
+  } else {
+    hideInputError(inputElement);
+  }
 }
 
 function isValidUrl(url) {
@@ -59,12 +50,6 @@ function setEventListeners(formElement) {
             checkInputValidation(inputElement);
             toggleButtonState(inputList, buttonElement);
         });
-    });
-
-    formElement.addEventListener('submit', (evt) => {
-        if (hasInvalidInput(inputList)) {
-            evt.preventDefault();
-        }
     });
 }
 
