@@ -40,11 +40,11 @@
       <h3 class="popup__title">Редактировать профиль</h3>
       <form class="popup__form" name="edit-profile" novalidate>
         <div class="input-group">
-          <input type="text" name="name" class="popup__input popup__input_type_name" placeholder="Имя" required minlength="2" maxlength="40" pattern="^[a-zA-Zа-яА-ЯёЁ\s-]+$" data-error-message="Некорректный ввод. Допустимы только латинские и русские буквы, дефисы и пробелы.">
+          <input type="text" name="name" class="popup__input popup__input_type_name" placeholder="Имя" required minlength="2" maxlength="40" pattern="[a-zA-Zа-яА-ЯёЁ\s\-]+" data-error="Некорректный ввод. Допустимы только латинские и русские буквы, дефисы и пробелы.">
           <span class="popup__error-message name-input-error"></span>
         </div>
         <div class="input-group">
-          <input type="text" name="description" class="popup__input popup__input_type_description" placeholder="Занятие" required minlength="2" maxlength="200" pattern="^[a-zA-Zа-яА-ЯёЁ\s-]+$" data-error-message="Некорректный ввод. Допустимы только латинские и русские буквы, дефисы и пробелы.">
+          <input type="text" name="description" class="popup__input popup__input_type_description" placeholder="Занятие" required minlength="2" maxlength="200" pattern="[a-zA-Zа-яА-ЯёЁ\s\-]+" data-error="Некорректный ввод. Допустимы только латинские и русские буквы, дефисы и пробелы.">
           <span class="popup__error-message description-input-error"></span>
         </div>
         <button type="submit" class="button popup__button">Сохранить</button>
@@ -57,7 +57,7 @@
       <h3 class="popup__title">Новое место</h3>
       <form class="popup__form" name="new-place" novalidate>
         <div class="input-group">
-          <input type="text" name="place-name" class="popup__input popup__input_type_card-name" placeholder="Название" required minlength="2" maxlength="30" ^[a-zA-Zа-яА-ЯёЁ\s-]+$ data-error-message="Некорректный ввод. Допустимы только латинские и русские буквы, дефисы и пробелы.">
+          <input type="text" name="place-name" class="popup__input popup__input_type_card-name" placeholder="Название" required minlength="2" maxlength="30" pattern="[a-zA-Zа-яА-ЯёЁ\s\-]+" data-error="Некорректный ввод. Допустимы только латинские и русские буквы, дефисы и пробелы.">
           <span class="popup__error-message"></span>
         </div>
         <div class="input-group" >

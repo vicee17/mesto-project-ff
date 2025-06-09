@@ -48,7 +48,7 @@ export function removeCard(cardId) {
 
 function handleLikeClick(evt) {
     const cardElement = evt.currentTarget.closest('.card');
-    const cardId = evt.currentTarget.closest('.card').dataset.cardId;
+    const cardId = cardElement.id;
     const likesCount = cardElement.querySelector('.likes-count');
    
     if (evt.currentTarget.classList.contains('card__like-button_is-active')) {

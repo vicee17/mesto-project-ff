@@ -17,17 +17,22 @@ function hideInputError(inputElement) {
 }
 
 function checkInputValidation(inputElement) {
-  if (inputElement.validity.patternMismatch) {
-    inputElement.setCustomValidity(inputElement.dataset.errorMessage);
-  } else {
-    inputElement.setCustomValidity("");
-  }
+  inputElement.setCustomValidity('');
+    
+    if (inputElement.validity.patternMismatch) {
+        const errorMessage = inputElement.dataset.error || 'Недопустимый формат';
+        inputElement.setCustomValidity(errorMessage);
+    }
+    
+    if (inputElement.type === 'url' && !isValidUrl(inputElement.value)) {
+        inputElement.setCustomValidity('Введите корректный URL');
+    }
 
-  if (!inputElement.validity.valid) {
-    showInputError(inputElement, inputElement.validationMessage);
-  } else {
-    hideInputError(inputElement);
-  }
+    if (!inputElement.validity.valid) {
+        showInputError(inputElement, inputElement.validationMessage);
+    } else {
+        hideInputError(inputElement);
+    }
 }
 
 function isValidUrl(url) {
@@ -84,7 +89,7 @@ function toggleButtonState(inputList, buttonElement) {
     if (hasInvalidInput(inputList)) {
         buttonElement.classList.add('button-inactive');
         buttonElement.disabled = true;
-    }else {
+    } else {
         buttonElement.classList.remove('button-inactive')
         buttonElement.disabled = false;
     }
